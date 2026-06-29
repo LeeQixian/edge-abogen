@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup, NavigableString
 import fitz  # PyMuPDF
 import markdown
 
-from .utils import detect_encoding
+from .utils import detect_encoding, strip_markdown_links
 
 # ---------------------------------------------------------------------------
 # 文本清理工具
@@ -418,6 +418,10 @@ class MarkdownParser(BaseBookParser):
         encoding = detect_encoding(self.book_path)
         with open(self.book_path, "r", encoding=encoding, errors="replace") as f:
             raw = f.read()
+
+        # Strip wikilinks and MD links before conversion
+        # so TTS reads alias text, not link syntax
+        raw = strip_markdown_links(raw)
 
         md = markdown.Markdown(extensions=["toc", "fenced_code"])
         html = md.convert(raw)
