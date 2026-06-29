@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "edge-audiobook"
+version = "0.1.0"
+description = "轻量级有声书生成器 - 使用 Microsoft Edge 免费 TTS，无需 GPU"
+authors = [{ name = "Edge Audiobook" }]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+keywords = ["audiobook", "tts", "edge-tts", "epub", "pdf", "text-to-speech"]
+dependencies = [
+    "edge-tts>=6.1.0",
+    "ebooklib>=0.19",
+    "beautifulsoup4>=4.13.4",
+    "PyMuPDF>=1.25.5",
+    "soundfile>=0.13.1",
+    "Markdown>=3.9",
+    "charset_normalizer>=3.4.1",
+    "chardet>=5.2.0",
+]
+
+[project.scripts]
+edge-audiobook = "edge_audiobook.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["edge_audiobook"]
