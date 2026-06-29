@@ -32,20 +32,13 @@
 
 ---
 
-## 为什么用这个而不是 abogen？
+## 原理
 
-| | abogen | edge-audiobook |
-|---|---|---|
-| TTS 引擎 | Kokoro-82M (本地 ONNX) | Microsoft Edge (云端) |
-| 需要 GPU？ | ✅ 推荐 | ❌ 不需要 |
-| 需要下载模型？ | ~330MB | 0 |
-| 内存占用 | 2-4GB+ | ~100MB |
-| 安装大小 | 5GB+ (含 PyTorch) | ~50MB |
-| 离线使用 | ✅ | ❌ (需要网络) |
-| 语音质量 | 合成感 | 自然流畅（神经语音） |
-| 多语种 | 有限 | 322 种语音 |
+abogen 使用本地 ONNX 模型 (Kokoro-82M) 做 TTS，需要 PyTorch + GPU。
+本项目将其 TTS 引擎替换为 edge-tts —— 通过 WebSocket 调用 Microsoft Edge 的免费云端 TTS 服务。
+书本解析（EPUB/PDF/Markdown/TXT）、章节检测、字幕生成等逻辑保留，但去掉了所有 GPU 依赖。
 
-**如果你的环境是 4GB 内存、2核 CPU 的虚拟机，edge-audiobook 是唯一可行的选择。**
+> 核心思路：**用云端 API 换掉本地模型，让老旧硬件也能跑。**
 
 ## 安装
 
@@ -97,10 +90,10 @@ edge-audiobook --gui
 edge-audiobook -L <语种>[-<地区>][-<性别>]
 
 示例:
-  -L zh          → 所有中文 (14 个)
-  -L en-us       → 所有 en-US (16 个)
-  -L en-us-f     → en-US 女声 (8 个)
-  -L ja-m        → 日语男声 (1 个)
+  -L zh          → 所有中文语音
+  -L en-us       → 所有 en-US 语音
+  -L en-us-f     → en-US 女声
+  -L ja-m        → 日语男声
   -L jenny       → 名称包含 "jenny" 的语音
 ```
 
@@ -110,40 +103,6 @@ edge-audiobook -L <语种>[-<地区>][-<性别>]
 - **PDF** (.pdf) — 支持有目录和无目录的 PDF
 - **Markdown** (.md) — 按标题层级分章
 - **纯文本** (.txt) — 自动检测章节标记
-
-## 工作原理
-
-```
-电子书 (EPUB/PDF/TXT)
-    │
-    ▼
-书本解析器 ──→ 章节列表 (标题 + 正文)
-    │
-    ▼
-文本分块 (每段 ≤ 2000 字符)
-    │
-    ▼
-edge-tts API ──→ MP3 音频流 + 句子边界元数据
-    │
-    ▼
-二进制拼接 + 生成 SRT 字幕
-    │
-    ▼
-输出: book.mp3 + book.srt
-```
-
-## 限制
-
-- **需要稳定的网络连接**（TTS 是云端服务）
-- **每次请求最多 ~2000 字符**（自动分块处理）
-- **离线使用** 不支持
-
-## 性能参考
-
-在 4GB RAM / 2核 / Windows 10 虚拟机上：
-- 一本 10 万字的书 → 约 20-30 分钟 → ~200MB mp3
-- 内存占用：< 200MB
-- CPU 占用：< 30%
 
 ## License
 
