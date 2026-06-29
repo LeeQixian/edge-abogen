@@ -12,8 +12,10 @@
 
 ## TODO
 
+- [ ] EPUB 解析实测 (parser 已写好，未用真 epub 验证)
+- [ ] PDF 解析实测 (同上)
+- [ ] Markdown 解析实测
 - [ ] 多角色对话支持（Speaker-based multi-voice dialogue）
-- [ ] 语音标记语法（如 `[speaker:name]text[/speaker]`）
 - [ ] 批量转换队列
 - [ ] 断点续传（长文本中断后恢复）
 
@@ -99,10 +101,10 @@ edge-audiobook -L <语种>[-<地区>][-<性别>]
 
 ## 支持的输入格式
 
-- **EPUB** (.epub) — 自动提取目录和章节
-- **PDF** (.pdf) — 支持有目录和无目录的 PDF
-- **Markdown** (.md) — 按标题层级分章
-- **纯文本** (.txt) — 自动检测章节标记
+- **纯文本** (.txt) — ✅ 已实测
+- **EPUB** (.epub) — ⚠️ 代码已适配，未用真文件验证
+- **PDF** (.pdf) — ⚠️ 代码已适配，未用真文件验证
+- **Markdown** (.md) — ⚠️ 代码已适配，未用真文件验证
 
 ## License
 
